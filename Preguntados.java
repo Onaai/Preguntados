@@ -17,13 +17,16 @@ public class Preguntados extends JFrame {
     private JLabel lblPropietario;
     private JLabel lblContador;
     private JLabel lblTimer;
+    private JLabel lblPuntos;
     private Timer timer;
     private int tiempoRestante;
-    private final int TIEMPO_LIMITE = 30; // 30 segundos por pregunta
+    private final int TIEMPO_LIMITE = 30;
+    private int puntos;
 
     public Preguntados() {
         preguntas = seleccionarPreguntasAleatorias(cargarPreguntas(), 10);
         indicePregunta = 0;
+        puntos = 0;
         inicializarUI();
         mostrarPregunta();
     }
@@ -32,16 +35,18 @@ public class Preguntados extends JFrame {
         setTitle("Juego de Preguntas");
         setSize(400, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new GridLayout(9, 1));
+        setLayout(new GridLayout(10, 1));
 
         lblContador = new JLabel();
         lblPregunta = new JLabel();
         lblPropietario = new JLabel();
         lblTimer = new JLabel();
+        lblPuntos = new JLabel("Puntos: 0");
         add(lblContador);
         add(lblPregunta);
         add(lblPropietario);
         add(lblTimer);
+        add(lblPuntos);
 
         checkBoxes = new JCheckBox[4];
         for (int i = 0; i < checkBoxes.length; i++) {
@@ -63,7 +68,6 @@ public class Preguntados extends JFrame {
     private List<Pregunta> cargarPreguntas() {
         List<Pregunta> listaPreguntas = new ArrayList<>();
 
-        // Ejemplo de preguntas
         listaPreguntas.add(new Pregunta("¿Qué usos tiene el hashing? (MÚLTIPLES OPCIONES CORRECTAS)",
                 new String[]{"Búsqueda de datos existentes", "Compresión de archivos", "Verificación de integridad", "Encriptación de datos"},
                 new String[]{"Búsqueda de datos existentes", "Verificación de integridad"}, "Tomas", true));
@@ -71,7 +75,7 @@ public class Preguntados extends JFrame {
         listaPreguntas.add(new Pregunta("¿Para qué sirve java.util.Scanner?",
                 new String[]{"Para realizar operaciones matemáticas complejas", "Para leer datos de entrada desde fuentes como el teclado, archivos o cadenas",
                         "Para gestionar las excepciones en el programa", "Para generar números aleatorios de forma eficiente"},
-                new String[]{"Para leer datos de entrada desde fuentes como el teclado, archivos o cadenas"}, "Joa", false));
+                new String[]{"Para leer datos de entrada desde fuentes como el teclado, archivos o cadenas"}, "Nahuel Iriart", false));
 
         listaPreguntas.add(new Pregunta("¿Qué es Spring?",
                 new String[]{"Una librería", "Ninguna es correcta", "Un framework", "Un programa"},
@@ -81,9 +85,48 @@ public class Preguntados extends JFrame {
                 new String[]{"Polimorfismo y todos los restantes", "Abstracción", "Encapsulación", "Herencia"},
                 new String[]{"Polimorfismo y todos los restantes"}, "Emiliano", true));
 
-        // Mezclar preguntas
-        Collections.shuffle(listaPreguntas);
+        // Nuevas preguntas
+        listaPreguntas.add(new Pregunta("¿Cuál de los siguientes es un tipo de dato primitivo?",
+                new String[]{"String", "Integer", "int", "Array"},
+                new String[]{"int"}, "Mica", false));
 
+        listaPreguntas.add(new Pregunta("¿Cuál es el proceso de convertir un tipo de dato a otro en Java?",
+                new String[]{"Casting", "Boxing", "Parsing", "Wrapper"},
+                new String[]{"Casting"}, "Mica", false));
+
+        listaPreguntas.add(new Pregunta("¿Cuál de las siguientes es una estructura de datos dinámica en Java?",
+                new String[]{"int", "ArrayList", "String", "Double"},
+                new String[]{"ArrayList"}, "Mica", false));
+
+        listaPreguntas.add(new Pregunta("¿Para qué se usa java.util.Enumeration en Java?",
+                new String[]{"Para representar colecciones de tipo Map", "Para iterar elementos en un tipo de colección", "Para ordenar listas", "Para almacenar valores únicos"},
+                new String[]{"Para iterar elementos en un tipo de colección"}, "Mica", false));
+
+        listaPreguntas.add(new Pregunta("¿Con qué comando se agrega un archivo a GitHub?",
+                new String[]{"Git init", "Git add", "Git commit", "Git branch"},
+                new String[]{"Git add"}, "Nahuel Iriart", false));
+
+        listaPreguntas.add(new Pregunta("¿Para qué sirve el SecureRandom?",
+                new String[]{"Generar contraseñas de longitud fija sin ningún tipo de aleatoriedad",
+                        "Crear claves de cifrado fijas que no cambian",
+                        "Proveer números aleatorios con un nivel de seguridad adecuado para criptografía",
+                        "Generar números aleatorios de manera predecible"},
+                new String[]{"Proveer números aleatorios con un nivel de seguridad adecuado para criptografía"}, "Nahuel Iriart", false));
+
+        listaPreguntas.add(new Pregunta("¿Cómo se declara un JFrame?",
+                new String[]{"JFrame frame = new JFrame();", "public class MiVentana extends JFrame", "Ambas son válidas", "Ninguna es correcta"},
+                new String[]{"public class MiVentana extends JFrame"}, "Joaco", false));
+
+        listaPreguntas.add(new Pregunta("¿Cómo se le pone un valor a un gráfico de torta?",
+                new String[]{"Con chocolate", ".setValue()", ".pack()", "Se colocan al declarar el gráfico"},
+                new String[]{".setValue()"}, "Joaco", false));
+
+        listaPreguntas.add(new Pregunta("¿Cuál es el nombre de la librería para importar un gráfico?",
+                new String[]{"javax.swing", "java.chart", "java.awt", "javax.graphics"},
+                new String[]{"java.awt"}, "Joaco", false));
+
+
+        Collections.shuffle(listaPreguntas);
         return listaPreguntas;
     }
 
@@ -98,28 +141,26 @@ public class Preguntados extends JFrame {
             Pregunta preguntaActual = preguntas.get(indicePregunta);
             lblContador.setText("Pregunta " + (indicePregunta + 1) + " de 10");
             lblPregunta.setText(preguntaActual.getTexto());
-            lblPropietario.setText("Propietario: " + preguntaActual.getPropietario());
+            lblPropietario.setText("Portfolio de: " + preguntaActual.getPropietario());
 
             String[] opciones = preguntaActual.getOpciones();
             boolean esMultiple = preguntaActual.esMultiple();
 
-            // Habilitar o deshabilitar opciones según si la pregunta permite múltiples respuestas
             for (int i = 0; i < checkBoxes.length; i++) {
                 if (i < opciones.length) {
                     checkBoxes[i].setText(opciones[i]);
                     checkBoxes[i].setVisible(true);
-                    checkBoxes[i].setEnabled(true); // Asegura que las opciones siempre sean seleccionables
-                    checkBoxes[i].setSelected(false); // Deseleccionamos las opciones al mostrar una nueva pregunta
-                    // Si la pregunta es de opción única, usamos JRadioButton
+                    checkBoxes[i].setEnabled(true);
+                    checkBoxes[i].setSelected(false);
                     if (!esMultiple) {
-                        checkBoxes[i].setEnabled(true); // Las opciones de selección única se pueden elegir
+                        checkBoxes[i].setEnabled(true);
                     }
                 } else {
                     checkBoxes[i].setVisible(false);
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(this, "¡Fin del juego!");
+            JOptionPane.showMessageDialog(this, "¡Fin del juego! Puntuación final: " + puntos);
             System.exit(0);
         }
     }
@@ -136,6 +177,7 @@ public class Preguntados extends JFrame {
                 lblTimer.setText("Tiempo restante: " + tiempoRestante + " segundos");
                 if (tiempoRestante <= 0) {
                     detenerTimer();
+                    JOptionPane.showMessageDialog(Preguntados.this, "El tiempo se agotó");
                     verificarRespuesta();
                 }
             }
@@ -158,13 +200,17 @@ public class Preguntados extends JFrame {
             }
         }
 
-        if (preguntaActual.sonCorrectas(respuestasSeleccionadas.toArray(new String[0]))) {
+        boolean respuestaCorrecta = preguntaActual.sonCorrectas(respuestasSeleccionadas.toArray(new String[0]));
+
+        if (respuestaCorrecta) {
+            puntos++;
             JOptionPane.showMessageDialog(this, "¡Respuesta correcta!");
         } else {
-            JOptionPane.showMessageDialog(this, "Respuesta incorrecta.");
+            puntos--;
+            JOptionPane.showMessageDialog(this, "La respuesta es incorrecta");
         }
 
-        // Avanzamos a la siguiente pregunta sin terminar el juego
+        lblPuntos.setText("Puntos: " + puntos);
         indicePregunta++;
         mostrarPregunta();
     }
