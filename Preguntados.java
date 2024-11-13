@@ -125,6 +125,17 @@ public class Preguntados extends JFrame {
                 new String[]{"javax.swing", "java.chart", "java.awt", "javax.graphics"},
                 new String[]{"java.awt"}, "Joaco", false));
 
+        listaPreguntas.add(new Pregunta("¿Qué es Whisper?",
+                new String[]{"Modelo de inteligencia artificial para reconocimiento de voz, diseñado para transcribir y traducir audio a texto en varios idiomas.",
+                        "Modelo de inteligencia artificial para conversión de texto, diseñado para traducir texto a audio en varios idiomas."},
+                new String[]{"Modelo de inteligencia artificial para reconocimiento de voz, diseñado para transcribir y traducir audio a texto en varios idiomas."}, "cris", false));
+
+        listaPreguntas.add(new Pregunta("¿Qué es SQRS?",
+                new String[]{"Es un principio de diseño que dice que cada clase o módulo debe tener una sola responsabilidad o motivo para cambiar, ayudando a mantener el código limpio y enfocado.",
+                        "Es un principio de diseño de base de datos donde cada base de datos debe tener una sola responsabilidad, lectura/Escritura."},
+                new String[]{"Es un principio de diseño de base de datos donde cada base de datos debe tener una sola responsabilidad, lectura/Escritura."}, "cris", false));
+
+
 
         Collections.shuffle(listaPreguntas);
         return listaPreguntas;
